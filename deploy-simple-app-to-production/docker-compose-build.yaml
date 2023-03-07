@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  simple-node-app:
+    image: masihmoloodian/simple-node-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile

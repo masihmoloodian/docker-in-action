@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  simple-node-app:
+    image: masihmoloodian/simple-node-app:latest
+    hostname: '{{.Node.Hostname}}'
+    command: /bin/bash -c ". /script/secret.sh ; node app.js"
+    deploy:
+      mode: replicated
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+      placement:
+        constraints:
+          - node.labels.api == true
+    networks:
+      - mynet
+    depends_on:
+      - pg-api
+    ports:
+      - 3000:3000
+
+    secrets:
+      - APP_MY_SECRET
+
+    env_file:
+      - .env
+
+networks:
+  mynet:
+    external: true
+  
+secrets:
+  APP_MY_SECRET:
+    external: true
